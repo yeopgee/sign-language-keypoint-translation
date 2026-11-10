@@ -16,10 +16,10 @@ def grouped_region_mask_korean_text_final(text: str) -> Tuple[str, Dict[str, str
     patterns = [
         (r'([0-2]?[0-9]:[0-5][0-9])', lambda m: [("<시간>", m.group(1))]),
         (r'([0-9]{1,2}시\s?[0-9]{0,2}분?)', lambda m: [("<시간>", m.group(1))]),
-        # ✅ 먼저 복합 지역 단어 (산 들어간 지역 방어용)
+        # Match administrative regions before shorter place names.
         (r'\b[가-힣]{2,10}(시|군|구|서구|북구|남구|동구)\b', lambda m: [("<지역>", m.group(0))]),
     
-        # ✅ 산 (예외 단어 방어 포함)
+        # Exclude common words that end in the mountain suffix.
         (r'(?<!부산)(?<!확산)(?<!등산)(?<!우산)(?<!횡산)([가-힣]{1,10}산)(?=\s|[.,은는이가의에에서와]|[0-9]|$)', 
          lambda m: [("<산>", m.group(1))]),
         (r'([가-힣0-9]{1,20}(사거리|삼거리|오거리|육거리)?\s?(고가도로|하상도로|지하차도|도로|차도|우회도로))',
@@ -50,7 +50,7 @@ def grouped_region_mask_korean_text_final(text: str) -> Tuple[str, Dict[str, str
     matches = []
     replaced_spans = []
 
-    # ✅ 원본 text 기준으로 전체 매치 수집
+    # Resolve overlaps against spans in the original text.
     for pattern, slot_func in patterns:
         for match in re.finditer(pattern, text):
             start, end = match.span()
@@ -60,10 +60,10 @@ def grouped_region_mask_korean_text_final(text: str) -> Tuple[str, Dict[str, str
                 if slot != "##EXCLUDE##":
                     matches.append((start, end, slot, value))
                     replaced_spans.append((start, end))
-                    slot_values[slot] = value  # ✅ 항상 마지막 slot_value만 저장됨
+                    slot_values[slot] = value
                     break
 
-    # ✅ masked_text를 뒤에서 앞으로 치환하여 인덱스 보존
+    # Replace from right to left so earlier offsets stay valid.
     masked_text = text
     for start, end, slot, _ in sorted(matches, reverse=True):
         masked_text = masked_text[:start] + slot + masked_text[end:]

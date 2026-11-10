@@ -73,19 +73,18 @@ class Seq2Seq(nn.Module):
         trg_len = trg.size(1)
         output_dim = self.decoder.output_dim
 
-        # 🧱 Output tensor 초기화
         outputs = torch.zeros(batch_size, trg_len, output_dim).to(self.device)
 
-        # 🔁 Encoder
+        # Merge the forward and backward encoder states for the decoder.
         encoder_outputs, hidden = self.encoder(src)  # hidden: (2, B, H)
         hidden = torch.tanh(hidden[0] + hidden[1]).unsqueeze(0)  # (1, B, H)
 
-        # 🔁 Decoder 시작 - 첫 input은 BOS 토큰
+        # Start decoding from the beginning-of-sequence token.
         input = trg[:, 0]  # (B,)
 
         for t in range(1, trg_len):
             output, hidden, _ = self.decoder(input, hidden, encoder_outputs)  # output: (B, vocab)
-            outputs[:, t] = output  # t 위치에 output 저장
+            outputs[:, t] = output
 
             teacher_force = torch.rand(1).item() < teacher_forcing_ratio
             top1 = output.argmax(1)  # (B,)

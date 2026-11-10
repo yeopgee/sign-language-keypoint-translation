@@ -45,4 +45,21 @@ The project showed why text preparation mattered as much as model architecture f
 | Prepare arrays and train | [`prepare_arrays.py`](prepare_arrays.py), [`model.py`](model.py), [`train.py`](train.py) |
 | Predict and inspect | [`predict.py`](predict.py), [`notebooks/sign_to_text.ipynb`](notebooks/sign_to_text.ipynb) |
 
-The scripts accept explicit input paths. With the AI-Hub data available and dependencies installed from [`requirements.txt`](requirements.txt), run the stages in the order shown in the table. The dataset and trained checkpoints are not included here.
+With the AI-Hub data available and dependencies installed from [`requirements.txt`](requirements.txt), run the stages in the order shown above. The dataset and trained checkpoints are not included here.
+
+<details>
+<summary>Example commands</summary>
+
+```bash
+python merge_keypoints.py --xml-root DATA/xml --json-root DATA/annotations --output-dir work/merged
+python split_samples.py --input-dir work/merged --output-dir work/split
+python normalize_keypoints.py --train-dir work/split/train --val-dir work/split/val --output-dir work/normalized
+python mask_text.py work/normalized/train
+python mask_text.py work/normalized/val
+python augment_frames.py --input-dir work/normalized/train --output-dir work/augmented
+python prepare_arrays.py --train-dir work/augmented --val-dir work/normalized/val --output-dir work/processed
+python train.py --data-dir work/processed --output checkpoints/best_model.pt
+python predict.py --keypoints sample.npy --tokenizer work/processed/spm.model --checkpoint checkpoints/best_model.pt
+```
+
+</details>

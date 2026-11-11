@@ -45,6 +45,8 @@ The initial model struggled with rare expressions. After text normalization, mas
 | Stage | Files |
 | --- | --- |
 | Match and split samples | [`merge_keypoints.py`](merge_keypoints.py), [`split_samples.py`](split_samples.py) |
-| Normalize, mask, and augment | [`normalize_keypoints.py`](normalize_keypoints.py), [`mask_text.py`](mask_text.py), [`augment_frames.py`](augment_frames.py) |
+| Normalize, mask, and augment | [`normalize_keypoints.py`](normalize_keypoints.py), [`normalize_text.py`](normalize_text.py), [`mask_text.py`](mask_text.py), [`augment_frames.py`](augment_frames.py) |
 | Prepare arrays and train | [`prepare_arrays.py`](prepare_arrays.py), [`model.py`](model.py), [`train.py`](train.py) |
-| Predict and inspect | [`predict.py`](predict.py), [`notebooks/sign_to_text.ipynb`](notebooks/sign_to_text.ipynb) |
+| Evaluate and predict | [`evaluation.py`](evaluation.py), [`predict.py`](predict.py) |
+| Optional video demonstration | [`video_demo.py`](video_demo.py), [`requirements-demo.txt`](requirements-demo.txt) |
+| Original experiments | [`notebooks/sign_to_text.ipynb`](notebooks/sign_to_text.ipynb) |

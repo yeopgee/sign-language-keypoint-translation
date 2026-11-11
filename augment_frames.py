@@ -12,9 +12,25 @@ def sample_indices(length, target, rng):
         raise ValueError('A sequence must contain at least one frame.')
     if length < target:
         return list(range(length)) + [length - 1] * (target - length)
-    interval = max(1, length // (target - 1))
-    offset = max(0, (length - interval * (target - 1)) // 2)
-    return [min(length - 1, offset + interval * i + rng.randrange(interval)) for i in range(target)]
+    # The baseline grid and per-frame noise follow the notebook's final
+    # 100-frame skip-sampling experiment.
+    interval = length // (target - 1)
+    offset = (length - interval * (target - 1)) // 2
+    baseline = [offset + interval * i for i in range(target)]
+    if baseline[-1] >= length:
+        baseline[-1] = length - 1
+    if interval == 1:
+        return [min(length - 1, max(0, index)) for index in baseline]
+
+    indices = []
+    for i, base in enumerate(baseline):
+        if base >= length - 1:
+            noise = 0
+        else:
+            noise_max = max(1, length - 1 - base) if i == target - 1 else max(1, interval)
+            noise = rng.randint(0, noise_max - 1)
+        indices.append(min(base + noise, length - 1))
+    return indices
 
 
 def main():

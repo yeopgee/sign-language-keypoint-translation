@@ -17,7 +17,7 @@ This repository contains my sign-to-text work from the [KUBIG Cheongseol team pr
 
 2. **Sign-to-Text Component**
    - Implemented a BiGRU encoder with an attention-based GRU decoder for keypoint-to-text translation.
-![Preprocessing and sign-to-text architecture from my KUBIG presentation](assets/sign2text-pipeline-presentation.png)
+![Preprocessing and sign-to-text architecture from my KUBIG presentation](assets/sign2text-pipeline-english.png)
 
 *Preprocessing and sign-to-text architecture from my KUBIG poster*
 

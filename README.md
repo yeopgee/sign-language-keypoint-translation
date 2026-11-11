@@ -1,42 +1,41 @@
 # Korean Sign Language to text from human keypoints
 
-This repository contains my sign-to-text work for [Cheongseol, a KUBIG project on two-way Korean Sign Language translation](https://github.com/KU-BIG/KUBIG_2025_SPRING/tree/main/KUBIG%20CONFERENCE/Image%20processing). The broader team also explored text-to-sign generation; the code here covers the keypoint-to-Korean-text direction.
+This repository contains my sign-to-text work from the [KUBIG Cheongseol team project](https://github.com/KU-BIG/KUBIG_2025_SPRING/tree/main/KUBIG%20CONFERENCE/Image%20processing). For more information about the two-way translation project, see the team repository.
 
 ## Motivation
 
-Full video contains background, lighting, and other information that a translation model may not need. We used pose and hand keypoints as a more compact representation. The data still posed a major challenge: many target sentences contain specific times, locations, and addresses that appear rarely in training.
+Body and hand keypoints provide a compact representation of sign-language movement. Translating them into Korean text remained difficult because many target sentences contained rare times, locations, and addresses.
 
 ## My contribution
 
-- Matched keypoint XML files with Korean sentence annotations, selected pose and hand coordinates, and split data by sentence ID.
-- Normalized keypoints, augmented sequences through temporal sampling, and replaced selected time, location, and address expressions with placeholder tokens.
-- Implemented a BiGRU encoder, attention-based GRU decoder, training pipeline, and prediction code for sign-to-text translation.
+- Matched OpenPose keypoint files with Korean sentences, selected body and hand coordinates, and split the data by sentence ID.
+- Normalized keypoints and augmented sequences through temporal sampling. Normalized target sentences and replaced rare time, location, and address expressions with placeholders.
+- Implemented a BiGRU encoder with an attention-based GRU decoder for keypoint-to-text translation.
 
 ```mermaid
 flowchart LR
-    A[Sign video keypoints] --> B[Match with Korean text]
-    B --> C[Select and normalize pose and hands]
-    C --> D[Temporal sampling]
-    D --> E[BiGRU encoder]
-    E --> F[Attention + GRU decoder]
-    F --> G[Korean text with placeholder tokens]
+    A[OpenPose keypoints] --> B[Select and normalize body and hands]
+    B --> C[Temporal sampling]
+    C --> D[BiGRU encoder]
+    D --> E[Attention + GRU decoder]
+    E --> F[Predicted Korean text]
+    G[Training sentences] --> H[Normalize and mask rare expressions]
+    H -. training targets .-> E
 ```
 
 ## Results
 
-The initial sign-to-text model struggled with the many rare expressions in the target sentences. After the team's normalization, masking, and decoding experiments, the best reported configuration reached **BLEU 0.3254** and **METEOR 0.4900**.
+The initial model struggled with rare expressions. After text normalization, masking, and decoding changes, the best reported configuration reached **BLEU 0.3254** and **METEOR 0.4900**.
 
 ![BLEU and METEOR across four sign-to-text configurations](assets/sign2text-metrics.svg)
 
 *Scores from my KUBIG presentation; the chart compares four sign-to-text configurations.*
 
-These numbers describe the reported sign-to-text experiment. The text-to-sign component and its results belong to the broader team project.
-
 ## Discussion
 
-The project showed why text preparation mattered as much as model architecture for this dataset. Its fire-alert domain was narrow, and rare names remained difficult even after masking. A video demonstration also required MediaPipe keypoints, whereas the training data used OpenPose-derived keypoints, creating an additional mismatch.
+Preparing target text was important for this keypoint-to-text task. The fire-alert-only corpus and rare names limited generalization. A video demonstration also used MediaPipe keypoints, which differed from the OpenPose keypoints used for training.
 
-## Code and usage
+## Code structure
 
 | Stage | Files |
 | --- | --- |
@@ -44,22 +43,3 @@ The project showed why text preparation mattered as much as model architecture f
 | Normalize, mask, and augment | [`normalize_keypoints.py`](normalize_keypoints.py), [`mask_text.py`](mask_text.py), [`augment_frames.py`](augment_frames.py) |
 | Prepare arrays and train | [`prepare_arrays.py`](prepare_arrays.py), [`model.py`](model.py), [`train.py`](train.py) |
 | Predict and inspect | [`predict.py`](predict.py), [`notebooks/sign_to_text.ipynb`](notebooks/sign_to_text.ipynb) |
-
-With the AI-Hub data available and dependencies installed from [`requirements.txt`](requirements.txt), run the stages in the order shown above. The dataset and trained checkpoints are not included here.
-
-<details>
-<summary>Example commands</summary>
-
-```bash
-python merge_keypoints.py --xml-root DATA/xml --json-root DATA/annotations --output-dir work/merged
-python split_samples.py --input-dir work/merged --output-dir work/split
-python normalize_keypoints.py --train-dir work/split/train --val-dir work/split/val --output-dir work/normalized
-python mask_text.py work/normalized/train
-python mask_text.py work/normalized/val
-python augment_frames.py --input-dir work/normalized/train --output-dir work/augmented
-python prepare_arrays.py --train-dir work/augmented --val-dir work/normalized/val --output-dir work/processed
-python train.py --data-dir work/processed --output checkpoints/best_model.pt
-python predict.py --keypoints sample.npy --tokenizer work/processed/spm.model --checkpoint checkpoints/best_model.pt
-```
-
-</details>

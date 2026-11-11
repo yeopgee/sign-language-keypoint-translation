@@ -5,7 +5,7 @@ This repository contains my sign-to-text work from the [KUBIG Cheongseol team pr
 ## Motivation
 
 - At a Coldplay concert, I saw deaf concertgoers experience the performance through sign-language interpretation.
-- The team watched the Korean film <Cheongseol> together and discussed how deaf people may miss audible alarms or calls for help in emergencies.
+- The team watched the Korean film 'Cheongseol' together and discussed how deaf people may miss audible alarms or calls for help in emergencies.
 - These experiences motivated me to work on real-time sign-language translation.
 
 ## My contribution

@@ -17,7 +17,7 @@ This repository contains my sign-to-text work from the [KUBIG Cheongseol team pr
 
 ![Preprocessing and sign-to-text architecture from my KUBIG presentation](assets/sign2text-pipeline-presentation.png)
 
-*Preprocessing and sign-to-text architecture from my KUBIG presentation. Open the image to read its full-resolution labels.*
+*Preprocessing and sign-to-text architecture from my KUBIG poster*
 
 ## Results
 

@@ -29,7 +29,7 @@ The initial model struggled with rare expressions. After text normalization, mas
 
 ![BLEU and METEOR across four sign-to-text configurations](assets/sign2text-metrics.svg)
 
-*Scores from my KUBIG presentation; the chart compares four sign-to-text configurations.*
+*Four sign-to-text configurations from my KUBIG presentation.*
 
 ## Discussion
 

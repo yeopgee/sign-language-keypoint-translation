@@ -3,3 +3,7 @@ torch
 sentencepiece
 xmltodict
 tqdm
+pandas
+evaluate
+rouge-score
+nltk

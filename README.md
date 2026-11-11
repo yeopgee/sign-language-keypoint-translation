@@ -23,7 +23,7 @@ This repository contains my sign-to-text work from the [KUBIG Cheongseol team pr
 
 ## Results
 
-The initial model struggled with rare expressions. After text normalization, masking, and decoding changes, the best reported configuration reached **BLEU 0.3254** and **METEOR 0.4900**.
+The initial model struggled with rare expressions. After text normalization, masking, and refinements to training strategies, the best reported configuration reached **BLEU 0.3254** and **METEOR 0.4900**.
 
 | Model | Top-k | Top-p | Repetition penalty | Label smoothing | TFR | BLEU | METEOR | ROUGE |
 | ---: | ---: | ---: | ---: | ---: | ---: | ---: | ---: | ---: |
@@ -34,10 +34,10 @@ The initial model struggled with rare expressions. After text normalization, mas
 
 *Configurations and metrics reproduced from my KUBIG presentation; Model 3 had the highest BLEU and METEOR.*
 
-## Discussion
+## Limitations
 
 - **Data:** Training used the fire-alert subset, limiting the range of contexts. Rare place names, times, and addresses remained difficult despite text normalization and masking.
-- **Keypoints and demonstration:** The presentation reported more than 15% missing keypoints. The demonstration used MediaPipe, while training used OpenPose, creating an input mismatch.
+- **Keypoints and demonstration:** The demonstration used MediaPipe, while training used OpenPose, creating an input mismatch.
 - **Next steps:** Broader training data, more complete masking, and consistent keypoint extraction would help test whether the model generalizes beyond the current setting.
 
 ## Code structure

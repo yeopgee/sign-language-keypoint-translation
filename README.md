@@ -37,7 +37,7 @@ The initial model struggled with rare expressions. After text normalization, mas
 ## Discussions
 
 - **Data:** Training used the fire-alert subset, limiting the range of contexts. Rare place names, times, and addresses remained difficult despite text normalization and masking.
-- **Keypoints Extraction:** The demonstration used MediaPipe, while training used OpenPose, creating an input mismatch.
+- **Keypoint extraction:** Extracting keypoints was challenging, with more than 15% of expected keypoints undetected. The demonstration used MediaPipe, while the model was trained on OpenPose keypoints, creating an input mismatch.
 - **Next steps:** Broader training data, more complete masking, and consistent keypoint extraction would help test whether the model generalizes beyond the current setting.
 
 ## Code structure

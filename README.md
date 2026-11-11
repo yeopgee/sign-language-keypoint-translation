@@ -23,7 +23,7 @@ This repository contains my sign-to-text work from the [KUBIG Cheongseol team pr
 
 ## Results
 
-The initial model struggled with rare expressions. After text normalization, masking, and refinements to training strategies, the best reported configuration reached **BLEU 0.3254** and **METEOR 0.4900**.
+The initial model struggled with rare expressions. After text normalization, masking, and refining training strategies, the best reported configuration reached **BLEU 0.3254** and **METEOR 0.4900**.
 
 | Model | Top-k | Top-p | Repetition penalty | Label smoothing | TFR | BLEU | METEOR | ROUGE |
 | ---: | ---: | ---: | ---: | ---: | ---: | ---: | ---: | ---: |

@@ -12,28 +12,28 @@ Body and hand keypoints provide a compact representation of sign-language moveme
 - Normalized keypoints and augmented sequences through temporal sampling. Normalized target sentences and replaced rare time, location, and address expressions with placeholders.
 - Implemented a BiGRU encoder with an attention-based GRU decoder for keypoint-to-text translation.
 
-```mermaid
-flowchart LR
-    A[OpenPose keypoints] --> B[Select and normalize body and hands]
-    B --> C[Temporal sampling]
-    C --> D[BiGRU encoder]
-    D --> E[Attention + GRU decoder]
-    E --> F[Predicted Korean text]
-    G[Training sentences] --> H[Normalize and mask rare expressions]
-    H -. training targets .-> E
-```
+![Preprocessing and sign-to-text architecture from my KUBIG presentation](assets/sign2text-pipeline-presentation.png)
+
+*Preprocessing and sign-to-text architecture from my KUBIG presentation. Open the image to read its full-resolution labels.*
 
 ## Results
 
 The initial model struggled with rare expressions. After text normalization, masking, and decoding changes, the best reported configuration reached **BLEU 0.3254** and **METEOR 0.4900**.
 
-![BLEU and METEOR across four sign-to-text configurations](assets/sign2text-metrics.svg)
+| Model | Top-k | Top-p | Repetition penalty | Label smoothing | TFR | BLEU | METEOR | ROUGE |
+| ---: | ---: | ---: | ---: | ---: | ---: | ---: | ---: | ---: |
+| 1 | 10 | 0.85 | 1.2 | 0.1 | 0.3 | 0.2612 | 0.4159 | 0.0000 |
+| 2 | 5 | 0.9 | 1.2 | 0.1 | 0.3 | 0.2909 | 0.4462 | 0.0000 |
+| **3** | **5** | **0.9** | **0.9** | **0.1** | **0.5** | **0.3254** | **0.4900** | **0.0016** |
+| 4 | 5 | 0.9 | 1.2 | 0.1 | 0.5 | 0.2936 | 0.4689 | 0.0016 |
 
-*Four sign-to-text configurations from my KUBIG presentation.*
+*Configurations and metrics reproduced from my KUBIG presentation; Model 3 had the highest BLEU and METEOR.*
 
 ## Discussion
 
-Preparing target text was important for this keypoint-to-text task. The fire-alert-only corpus and rare names limited generalization. A video demonstration also used MediaPipe keypoints, which differed from the OpenPose keypoints used for training.
+- **Data:** Training used the fire-alert subset, limiting the range of contexts. Rare place names, times, and addresses remained difficult despite text normalization and masking.
+- **Keypoints and demonstration:** The presentation reported more than 15% missing keypoints. The demonstration used MediaPipe, while training used OpenPose, creating an input mismatch.
+- **Next steps:** Broader training data, more complete masking, and consistent keypoint extraction would help test whether the model generalizes beyond the current setting.
 
 ## Code structure
 

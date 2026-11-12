@@ -1,4 +1,4 @@
-# Korean Sign Language to text from human keypoints
+# Korean Sign Language Translation from Human Keypoints 
 
 This repository contains my sign-to-text work from the [KUBIG Cheongseol team project](https://github.com/KU-BIG/KUBIG_2025_SPRING/tree/main/KUBIG%20CONFERENCE/Image%20processing). For more information about the two-way translation project, see the team repository.
 

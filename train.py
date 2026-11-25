@@ -43,8 +43,10 @@ def run_epoch(model, loader, criterion, device, teacher_forcing, optimizer=None,
         if optimizer is not None:
             optimizer.zero_grad(set_to_none=True)
         with torch.set_grad_enabled(optimizer is not None):
-            # Match the notebook: decoder input excludes EOS and the target
-            # starts after BOS. Validation uses no teacher forcing.
+            # Preserve the notebook's historical target alignment. Seq2Seq leaves
+            # output[:, 0] zero; comparing all outputs to shifted targets below
+            # is an indexing issue to fix before retraining (see README).
+            # Validation uses no teacher forcing.
             output = model(x, y[:, :-1], teacher_forcing_ratio=teacher_forcing)
             target = y[:, 1:]
             loss = criterion(output.reshape(-1, output.size(-1)), target.reshape(-1))

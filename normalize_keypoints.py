@@ -23,6 +23,7 @@ def fit_stats(train_dir):
     right = np.asarray(values['hand_right'], dtype=float)
     if min(len(pose), len(left), len(right)) == 0:
         raise ValueError('Training data must contain pose, left-hand, and right-hand keypoints.')
+    # Pose uses z-scores; each hand uses min–max scaling centered at zero.
     return dict(pose_mu=pose.mean(0), pose_sd=pose.std(0),
                 left_min=left.min(0), left_max=left.max(0),
                 right_min=right.min(0), right_max=right.max(0))

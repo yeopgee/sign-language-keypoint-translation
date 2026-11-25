@@ -89,6 +89,8 @@ def predict_from_keypoints(model, keypoints, tokenizer, device, max_len=100):
     predicted = []
     with torch.no_grad():
         for _ in range(max_len):
+            # Historical prototype: a BOS-only input yields the model's zero
+            # first output. predict.py instead calls the decoder directly.
             output = model(x, decoder_input, teacher_forcing_ratio=0.0)
             next_token = output[:, -1, :].argmax(dim=-1).item()
             if next_token == tokenizer.eos_id():

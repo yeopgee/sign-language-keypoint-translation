@@ -37,6 +37,7 @@ class KeypointTextDataset(Dataset):
 
 def collate(batch, max_frames=100):
     xs, ys = zip(*batch)
+    # Match notebook batching: truncate long sequences and zero-pad shorter ones.
     frames = min(max(len(x) for x in xs), max_frames)
     x_batch = torch.stack([F.pad(x[:frames], (0, 0, 0, frames - min(len(x), frames))) for x in xs])
     tokens = max(len(y) for y in ys)

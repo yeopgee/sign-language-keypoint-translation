@@ -10,8 +10,3 @@ work/
 *.ckpt
 *.zip
 *.tar.gz
-.DS_Store
-.venv/
-.pytest_cache/
-val_predictions*.csv
-video.mp4
